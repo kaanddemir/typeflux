@@ -172,41 +172,7 @@
         <div class="accordion-content">
           <div class="accordion-inner">
             <div class="accordion-inner-content">
-              <!-- Scale Mode Select -->
-              <div class="control-group"
-                style="padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border);">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <label class="group-label" style="margin-bottom:0;">Scale Mode</label>
-                  <select id="headingScaleMode" class="custom-select" style="width: 140px;">
-                    <option value="manual">Manual (H1-H6)</option>
-                    <option value="ratio">Ratio Scale</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Ratio Controls -->
-              <div id="ratioControls" class="controls-grid"
-                style="display: none; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border);">
-                <div class="control-row">
-                  <label>Base Size</label>
-                  <input type="range" class="slider" id="ratioBase" min="12" max="24" value="16" step="1">
-                  <div class="value-input-wrap">
-                    <input type="text" class="value-input" id="ratioBaseValue" min="8" max="48" value="16">
-                    <span class="unit">px</span>
-                  </div>
-                </div>
-                <div class="control-row">
-                  <label>Ratio</label>
-                  <input type="range" class="slider" id="ratioSelect" min="1.067" max="2.000" value="1.250"
-                    step="0.001">
-                  <div class="value-input-wrap">
-                    <input type="text" class="value-input" id="ratioSelectValue" min="1.000" max="3.000" value="1.250"
-                      step="0.001">
-                  </div>
-                </div>
-              </div>
-
-              <div id="manualControls" class="controls-grid">
+              <div class="controls-grid">
 
                 <div class="control-row" data-tag="h1">
                   <label>H1</label>
@@ -224,7 +190,6 @@
                     <span class="unit">px</span>
                   </div>
                 </div>
-                <!-- Mini layout for H3-H6 to save space if needed, keeping it uniform for now -->
                 <div class="control-row" data-tag="h3">
                   <label>H3</label>
                   <input type="range" class="slider heading-slider" min="20" max="56" value="31" data-tag="h3">
@@ -233,29 +198,43 @@
                     <span class="unit">px</span>
                   </div>
                 </div>
-                <div class="control-row" data-tag="h4">
-                  <label>H4</label>
-                  <input type="range" class="slider heading-slider" min="18" max="40" value="25" data-tag="h4">
-                  <div class="value-input-wrap">
-                    <input type="text" class="value-input heading-value" min="10" max="96" value="25" data-tag="h4">
-                    <span class="unit">px</span>
+                <div id="advancedHeadings" style="display: none; flex-direction: column; gap: 10px;">
+                  <div class="control-row" data-tag="h4">
+                    <label>H4</label>
+                    <input type="range" class="slider heading-slider" min="18" max="40" value="25" data-tag="h4">
+                    <div class="value-input-wrap">
+                      <input type="text" class="value-input heading-value" min="10" max="96" value="25" data-tag="h4">
+                      <span class="unit">px</span>
+                    </div>
+                  </div>
+                  <div class="control-row" data-tag="h5">
+                    <label>H5</label>
+                    <input type="range" class="slider heading-slider" min="16" max="32" value="20" data-tag="h5">
+                    <div class="value-input-wrap">
+                      <input type="text" class="value-input heading-value" min="8" max="72" value="20" data-tag="h5">
+                      <span class="unit">px</span>
+                    </div>
+                  </div>
+                  <div class="control-row" data-tag="h6">
+                    <label>H6</label>
+                    <input type="range" class="slider heading-slider" min="14" max="24" value="16" data-tag="h6">
+                    <div class="value-input-wrap">
+                      <input type="text" class="value-input heading-value" min="8" max="48" value="16" data-tag="h6">
+                      <span class="unit">px</span>
+                    </div>
                   </div>
                 </div>
-                <div class="control-row" data-tag="h5">
-                  <label>H5</label>
-                  <input type="range" class="slider heading-slider" min="16" max="32" value="20" data-tag="h5">
-                  <div class="value-input-wrap">
-                    <input type="text" class="value-input heading-value" min="8" max="72" value="20" data-tag="h5">
-                    <span class="unit">px</span>
-                  </div>
-                </div>
-                <div class="control-row" data-tag="h6">
-                  <label>H6</label>
-                  <input type="range" class="slider heading-slider" min="14" max="24" value="16" data-tag="h6">
-                  <div class="value-input-wrap">
-                    <input type="text" class="value-input heading-value" min="8" max="48" value="16" data-tag="h6">
-                    <span class="unit">px</span>
-                  </div>
+
+                <div class="show-more-container" style="display: flex; justify-content: center; margin-top: 4px;">
+                  <button id="showMoreHeadingsBtn"
+                    style="background: transparent; border: none; color: var(--text-muted); font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 4px; transition: color 0.2s;">
+                    Show More
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"
+                      id="showMoreIcon">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
                 </div>
               </div>
             </div>

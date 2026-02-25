@@ -15,13 +15,9 @@ const DEFAULTS = {
     h1: 48, h2: 38, h3: 31, h4: 25, h5: 20, h6: 16,
     bodySize: 16,
     lineHeight: 1.5,
-    letterSpacing: 0,
-    ratioBase: 16,
-    ratioSelect: 1.250
+    letterSpacing: 0
 };
 
-// ===== State =====
-let isContentScriptReady = false;
 
 // ===== DOM References =====
 const fontSearch = document.getElementById('fontSearch');
@@ -47,17 +43,14 @@ const lineValue = document.getElementById('lineHeightValue');
 const letterSlider = document.getElementById('letterSpacing');
 const letterValue = document.getElementById('letterSpacingValue');
 
-const headingScaleMode = document.getElementById('headingScaleMode');
-const ratioControls = document.getElementById('ratioControls');
-const manualControls = document.getElementById('manualControls');
-const ratioBase = document.getElementById('ratioBase');
-const ratioBaseValue = document.getElementById('ratioBaseValue');
-const ratioSelect = document.getElementById('ratioSelect');
-const ratioSelectValue = document.getElementById('ratioSelectValue');
+
 
 const validationWarning = document.getElementById('validationWarning');
 const errorWarning = document.getElementById('errorWarning');
 const extensionToggle = document.getElementById('extensionToggle');
+
+const showMoreHeadingsBtn = document.getElementById('showMoreHeadingsBtn');
+const advancedHeadings = document.getElementById('advancedHeadings');
 
 selectModeBtn.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -216,7 +209,6 @@ async function ensureContentScript() {
         // Try to ping first
         try {
             await chrome.tabs.sendMessage(tab.id, { type: 'ping' });
-            isContentScriptReady = true;
             fetchAndApplyMetadata(tab.id);
             return;
         } catch {
@@ -228,7 +220,6 @@ async function ensureContentScript() {
             target: { tabId: tab.id },
             files: ['content.js']
         });
-        isContentScriptReady = true;
         fetchAndApplyMetadata(tab.id);
     } catch (err) {
         console.error('TypeFlux: Could not inject content script', err);
@@ -419,14 +410,12 @@ document.querySelectorAll('.heading-slider').forEach(slider => {
     const valueInput = document.querySelector(`.heading-value[data-tag="${tag}"]`);
 
     slider.addEventListener('input', () => {
-        if (headingScaleMode.value === 'ratio') headingScaleMode.value = 'manual';
         valueInput.value = slider.value;
         sendToTab({ type: 'updateHeading', tag, value: slider.value });
         checkValidation();
     });
 
     valueInput.addEventListener('input', () => {
-        if (headingScaleMode.value === 'ratio') headingScaleMode.value = 'manual';
         const val = clamp(valueInput.value, valueInput.min, valueInput.max);
         slider.value = clamp(val, slider.min, slider.max);
         sendToTab({ type: 'updateHeading', tag, value: val });
@@ -434,70 +423,20 @@ document.querySelectorAll('.heading-slider').forEach(slider => {
     });
 });
 
-// ===== Scale Mode & Ratio Logic =====
-function applyRatioMode() {
-    if (headingScaleMode.value !== 'ratio') return;
-
-    let baseRaw = ratioBaseValue.value ? ratioBaseValue.value.replace(',', '.') : ratioBase.value;
-    let ratioRaw = ratioSelectValue.value ? ratioSelectValue.value.replace(',', '.') : ratioSelect.value;
-
-    const base = parseFloat(baseRaw) || 16;
-    const ratio = parseFloat(ratioRaw) || 1.250;
-    let currentSize = base;
-
-    // Scale hierarchically from H6 up to H1
-    const tags = ['h6', 'h5', 'h4', 'h3', 'h2', 'h1'];
-    tags.forEach(tag => {
-        const rounded = Math.round(currentSize);
-
-        const slider = document.querySelector(`.heading-slider[data-tag="${tag}"]`);
-        if (slider) {
-            slider.value = clamp(rounded, slider.min, slider.max);
-            document.querySelector(`.heading-value[data-tag="${tag}"]`).value = rounded;
-            sendToTab({ type: 'updateHeading', tag, value: rounded });
+if (showMoreHeadingsBtn) {
+    showMoreHeadingsBtn.addEventListener('click', () => {
+        const isHidden = advancedHeadings.style.display === 'none';
+        if (isHidden) {
+            advancedHeadings.style.display = 'flex';
+            showMoreHeadingsBtn.innerHTML = `Show Less <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s; transform: rotate(180deg);"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+        } else {
+            advancedHeadings.style.display = 'none';
+            showMoreHeadingsBtn.innerHTML = `Show More <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
         }
-
-        currentSize *= ratio;
     });
-    checkValidation();
 }
 
-headingScaleMode.addEventListener('change', () => {
-    if (headingScaleMode.value === 'ratio') {
-        ratioControls.style.display = 'flex';
-        ratioControls.style.flexDirection = 'column'; // Ensure it looks like controls-grid
-        ratioControls.style.gap = '8px';
-        manualControls.style.display = 'none';
-        applyRatioMode();
-    } else {
-        ratioControls.style.display = 'none';
-        manualControls.style.display = 'flex';
-    }
-});
 
-ratioBase.addEventListener('input', () => {
-    ratioBaseValue.value = ratioBase.value;
-    applyRatioMode();
-});
-
-ratioBaseValue.addEventListener('input', () => {
-    const val = clamp(ratioBaseValue.value, ratioBaseValue.min, ratioBaseValue.max);
-    ratioBase.value = clamp(val, ratioBase.min, ratioBase.max);
-    applyRatioMode();
-});
-
-ratioSelect.addEventListener('input', () => {
-    ratioSelectValue.value = ratioSelect.value;
-    applyRatioMode();
-    checkValidation();
-});
-
-ratioSelectValue.addEventListener('input', () => {
-    const val = clampFloat(ratioSelectValue.value, ratioSelectValue.min, ratioSelectValue.max);
-    ratioSelect.value = clampFloat(val, ratioSelect.min, ratioSelect.max);
-    applyRatioMode();
-    checkValidation();
-});
 
 // ===== Body Style Options =====
 bodySlider.addEventListener('input', () => {
@@ -567,13 +506,11 @@ resetTypographyBtn.addEventListener('click', (e) => {
 resetHeadingsBtn.addEventListener('click', (e) => {
     e.stopPropagation();
 
-    // Reset Heading Scale Mode
-    headingScaleMode.value = 'manual';
-    ratioControls.style.display = 'none';
-    manualControls.style.display = 'flex';
-    ratioBase.value = 16;
-    ratioBaseValue.value = 16;
-    ratioSelect.value = "1.250";
+    // Reset Show More state
+    if (showMoreHeadingsBtn) {
+        advancedHeadings.style.display = 'none';
+        showMoreHeadingsBtn.innerHTML = `Show More <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+    }
 
     // Reset Heading Sliders in UI
     document.querySelectorAll('.heading-slider').forEach(slider => {
@@ -621,13 +558,11 @@ resetBtn.addEventListener('click', () => {
     weightBody.value = DEFAULTS.bodyWeight;
     updateWeightUI();
 
-    // 2. Reset Heading Sliders and Mode in UI
-    headingScaleMode.value = 'manual';
-    ratioControls.style.display = 'none';
-    manualControls.style.display = 'flex';
-    ratioBase.value = 16;
-    ratioBaseValue.value = 16;
-    ratioSelect.value = "1.250";
+    // 2. Reset Heading Sliders in UI
+    if (showMoreHeadingsBtn) {
+        advancedHeadings.style.display = 'none';
+        showMoreHeadingsBtn.innerHTML = `Show More <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+    }
 
     document.querySelectorAll('.heading-slider').forEach(slider => {
         const tag = slider.dataset.tag;
