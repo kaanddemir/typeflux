@@ -35,7 +35,6 @@ The extension requests minimal permissions:
 | :--- | :--- |
 | `activeTab` | Access only the current tab, and only after you interact with the extension |
 | `scripting` | Dynamically inject the typography engine code when you activate it |
-| `host_permissions (<all_urls>)` | Required by `chrome.scripting.executeScript` to inject the content script on any webpage |
 
 ### Third-Party Services
 The only external connection TypeFlux makes is to **Google Fonts** (`fonts.googleapis.com`) to load font families selected by the user. No user data is included in these requests — only the font name is sent as part of the standard CSS URL. No other third-party services, APIs, advertisement networks, or analytics are used.
