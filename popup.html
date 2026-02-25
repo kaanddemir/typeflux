@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TypeFlux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-text">TypeFlux</span>
+      </div>
+      <div class="header-actions">
+        <button id="selectModeBtn" class="reset-icon-btn" title="Select Element">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" />
+            <path d="M13 13l6 6" />
+          </svg>
+        </button>
+        <button id="resetBtn" class="reset-icon-btn" title="Reset All">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+        </button>
+        <label class="switch">
+          <input type="checkbox" id="extensionToggle">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </header>
+
+    <div id="selectModeIndicator" class="validation-warning">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; flex-shrink: 0;">
+        <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" />
+      </svg>
+      <span>Editing Elements</span>
+    </div>
+
+    <div id="validationWarning" class="validation-warning">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; flex-shrink: 0;">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+        <path d="M12 9v4" />
+        <path d="M12 17h.01" />
+      </svg>
+      <span>Outside recommended range.</span>
+    </div>
+
+    <div id="errorWarning" class="validation-warning">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; flex-shrink: 0;">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span>Cannot be used on this page.</span>
+    </div>
+
+    <div class="accordion">
+      <!-- Font Family Section -->
+      <div class="accordion-item active">
+        <button class="accordion-header">
+          <div class="header-left">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="4 7 4 4 20 4 20 7"></polyline>
+              <line x1="9" y1="20" x2="15" y2="20"></line>
+              <line x1="12" y1="4" x2="12" y2="20"></line>
+            </svg>
+            <span>Typography</span>
+          </div>
+          <div class="header-right">
+            <div class="section-reset-btn" id="resetTypographyBtn" title="Reset Typography">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+              </svg>
+            </div>
+            <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <div class="accordion-inner-content">
+
+              <!-- Font Family -->
+              <div class="control-group">
+                <label class="group-label">Font Family</label>
+                <div class="font-selector">
+                  <input type="text" id="fontSearch" class="font-search" placeholder="Search Google Fonts..."
+                    autocomplete="off">
+                  <div id="fontDropdown" class="font-dropdown hidden">
+                    <!-- Populated by JS -->
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Unified Weight Control -->
+              <div class="control-group weight-group">
+                <label class="group-label">Weight</label>
+                <div class="weight-controls-row" style="display: flex; gap: 8px;">
+                  <select id="weightTarget" class="custom-select" style="flex: 1;">
+                    <option value="all">All Text</option>
+                    <option value="headings">Headings</option>
+                    <option value="body">Body</option>
+                  </select>
+
+                  <select id="globalWeight" class="custom-select" style="flex: 1;">
+                    <option value="100">100 - Thin</option>
+                    <option value="200">200 - Extra Light</option>
+                    <option value="300">300 - Light</option>
+                    <option value="400">400 - Regular</option>
+                    <option value="500">500 - Medium</option>
+                    <option value="600">600 - Semi Bold</option>
+                    <option value="700">700 - Bold</option>
+                    <option value="800">800 - Extra Bold</option>
+                    <option value="900">900 - Black</option>
+                  </select>
+                </div>
+                <!-- Hidden inputs to store actual weights per target -->
+                <input type="hidden" id="weightAll" value="400">
+                <input type="hidden" id="weightHeadings" value="700">
+                <input type="hidden" id="weightBody" value="400">
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Heading Sizes Section -->
+      <div class="accordion-item active">
+        <button class="accordion-header">
+          <div class="header-left">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 12h12M6 4h12M6 20h12" />
+            </svg>
+            <span>Heading Sizes</span>
+          </div>
+          <div class="header-right">
+            <div class="section-reset-btn" id="resetHeadingsBtn" title="Reset Headings">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+              </svg>
+            </div>
+            <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <div class="accordion-inner-content">
+              <!-- Scale Mode Select -->
+              <div class="control-group"
+                style="padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <label class="group-label" style="margin-bottom:0;">Scale Mode</label>
+                  <select id="headingScaleMode" class="custom-select" style="width: 140px;">
+                    <option value="manual">Manual (H1-H6)</option>
+                    <option value="ratio">Ratio Scale</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Ratio Controls -->
+              <div id="ratioControls" class="controls-grid"
+                style="display: none; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--border);">
+                <div class="control-row">
+                  <label>Base Size</label>
+                  <input type="range" class="slider" id="ratioBase" min="12" max="24" value="16" step="1">
+                  <div class="value-input-wrap">
+                    <input type="text" class="value-input" id="ratioBaseValue" min="8" max="48" value="16">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+                <div class="control-row">
+                  <label>Ratio</label>
+                  <input type="range" class="slider" id="ratioSelect" min="1.067" max="2.000" value="1.250"
+                    step="0.001">
+                  <div class="value-input-wrap">
+                    <input type="text" class="value-input" id="ratioSelectValue" min="1.000" max="3.000" value="1.250"
+                      step="0.001">
+                  </div>
+                </div>
+              </div>
+
+              <div id="manualControls" class="controls-grid">
+
+                <div class="control-row" data-tag="h1">
+                  <label>H1</label>
+                  <input type="range" class="slider heading-slider" min="32" max="96" value="48" data-tag="h1">
+                  <div class="value-input-wrap">
+                    <input type="text" class="value-input heading-value" min="16" max="200" value="48" data-tag="h1">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+                <div class="control-row" data-tag="h2">
+                  <label>H2</label>
+                  <input type="range" class="slider heading-slider" min="24" max="72" value="38" data-tag="h2">
+                  <div class="value-input-wrap">
+                    <input type="text" class="value-input heading-value" min="12" max="160" value="38" data-tag="h2">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+                <!-- Mini layout for H3-H6 to save space if needed, keeping it uniform for now -->
+                <div class="control-row" data-tag="h3">
+                  <label>H3</label>
+                  <input type="range" class="slider heading-slider" min="20" max="56" value="31" data-tag="h3">
+                  <div class="value-input-wrap">
+                    <input type="text" class="value-input heading-value" min="10" max="128" value="31" data-tag="h3">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+                <div class="control-row" data-tag="h4">
+                  <label>H4</label>
+                  <input type="range" class="slider heading-slider" min="18" max="40" value="25" data-tag="h4">
+                  <div class="value-input-wrap">
+                    <input type="text" class="value-input heading-value" min="10" max="96" value="25" data-tag="h4">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+                <div class="control-row" data-tag="h5">
+                  <label>H5</label>
+                  <input type="range" class="slider heading-slider" min="16" max="32" value="20" data-tag="h5">
+                  <div class="value-input-wrap">
+                    <input type="text" class="value-input heading-value" min="8" max="72" value="20" data-tag="h5">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+                <div class="control-row" data-tag="h6">
+                  <label>H6</label>
+                  <input type="range" class="slider heading-slider" min="14" max="24" value="16" data-tag="h6">
+                  <div class="value-input-wrap">
+                    <input type="text" class="value-input heading-value" min="8" max="48" value="16" data-tag="h6">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Body Style Section (combined body size + spacing to save space) -->
+      <div class="accordion-item active">
+        <button class="accordion-header">
+          <div class="header-left">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+            </svg>
+            <span>Body Style</span>
+          </div>
+          <div class="header-right">
+            <div class="section-reset-btn" id="resetBodyBtn" title="Reset Body Style">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+              </svg>
+            </div>
+            <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-inner">
+            <div class="accordion-inner-content">
+              <div class="controls-grid">
+
+                <div class="control-row">
+                  <label>Size</label>
+                  <input type="range" class="slider" id="bodySize" min="14" max="24" value="16" step="1">
+                  <div class="value-input-wrap">
+                    <input type="text" class="value-input" id="bodySizeValue" min="8" max="48" value="16">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+                <div class="control-row">
+                  <label>Line Height</label>
+                  <input type="range" class="slider" id="lineHeight" min="1.0" max="2.5" value="1.5" step="0.1">
+                  <div class="value-input-wrap">
+                    <input type="text" class="value-input" id="lineHeightValue" min="0.5" max="5.0" value="1.5"
+                      step="0.1">
+                    <span class="unit">×</span>
+                  </div>
+                </div>
+                <div class="control-row">
+                  <label>Letter Spacing</label>
+                  <input type="range" class="slider" id="letterSpacing" min="-2" max="8" value="0" step="0.5">
+                  <div class="value-input-wrap">
+                    <input type="text" class="value-input" id="letterSpacingValue" min="-5" max="20" value="0"
+                      step="0.5">
+                    <span class="unit">px</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- .accordion end -->
+
+
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
