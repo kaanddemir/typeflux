@@ -20,7 +20,7 @@ Every operation runs locally in your browser with zero external data collection.
 ## Features
 *   **Google Fonts Integration:** Search and apply from 30 curated Google Fonts instantly. Fonts are loaded on demand via the Google Fonts CSS API with full weight support (100–900).
 *   **Unified Weight Control:** Adjust font weight for all text, headings only, or body text only — from a single dropdown interface. Supports all 9 standard weight values from Thin (100) to Black (900).
-*   **Dual Heading Scale Modes:** Set H1–H6 sizes manually with individual sliders, or switch to **Ratio Scale** mode — which calculates heading sizes mathematically from a base size and scale ratio (e.g. Major Third 1.250, Perfect Fourth 1.333).
+*   **Individual Heading Control:** Set H1–H6 sizes manually with individual sliders. H1–H3 are always visible, with H4–H6 available via a "Show More" toggle for a cleaner interface.
 *   **Body Style Tuning:** Fine-tune body font size (8–48px), line height (0.5–5.0×), and letter spacing (-5–20px) with linked slider + input controls.
 *   **Element Selection Mode:** Click the cursor icon, then click any text element on the page to style it individually. Non-text elements (images, SVGs, iframes) are automatically filtered out. A toast notification confirms your selection.
 *   **Smart Validation System:** Warnings appear when values exceed recommended slider ranges — with inline warning icons next to affected labels and an auto-dismissing toast notification. Validation is disabled during element editing mode.
@@ -72,27 +72,10 @@ The selection mode filters out non-text elements to prevent accidental targeting
 
 If a click lands on an ignored element, the selection bubbles up to the nearest valid parent.
 
-### Ratio Scale System
-
-The ratio scale mode calculates heading sizes using a mathematical progression:
-
-```
-H6 = base
-H5 = base × ratio
-H4 = base × ratio²
-H3 = base × ratio³
-H2 = base × ratio⁴
-H1 = base × ratio⁵
-```
-
-| Example | Base | Ratio | H6 | H5 | H4 | H3 | H2 | H1 |
-|---------|:----:|:-----:|:--:|:--:|:--:|:--:|:--:|:--:|
-| Major Third | 16px | 1.250 | 16 | 20 | 25 | 31 | 39 | 49 |
-| Perfect Fourth | 16px | 1.333 | 16 | 21 | 28 | 38 | 51 | 68 |
 
 ## Use Cases
 *   **UI/UX Designers:** Quickly test how different fonts and weights affect the visual hierarchy of a live page — without opening Figma or writing CSS. Compare typefaces side-by-side by switching fonts in seconds.
-*   **Frontend Developers:** Validate typography during design-to-code handoff. Use ratio scale mode to verify that heading sizes follow a consistent modular scale before committing to a CSS system.
+*   **Frontend Developers:** Validate typography during design-to-code handoff. Use individual heading sliders to verify that heading sizes follow a consistent visual hierarchy before committing to a CSS system.
 *   **Content Strategists:** Evaluate readability of long-form content by adjusting line height, letter spacing, and body font size in real-time. Find the optimal reading experience before requesting design changes.
 *   **Accessibility Auditors:** Test font size compliance and readability thresholds on live pages. Quickly identify text that's too small, too tightly spaced, or using hard-to-read weights.
 *   **Typography Enthusiasts:** Experiment with Google Fonts on any website to see how different typefaces look in a real-world context — not just a font preview tool.

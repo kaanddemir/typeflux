@@ -1,5 +1,5 @@
 # Privacy Policy
-Last Updated: February 25, 2026
+Last Updated: March 1, 2026
 
 ## TypeFlux Chrome Extension
 
