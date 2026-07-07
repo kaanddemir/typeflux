@@ -102,7 +102,7 @@ See our [Privacy Policy](PRIVACY_POLICY.md) for the full policy.
 ## Installation
 
 ### From Chrome Web Store
-*(Coming soon)*
+[Install TypeFlux from the Chrome Web Store](https://chromewebstore.google.com/detail/typeflux/nemkilhkadhfoafhdbmomnoaanodeehh)
 
 ### Manual Installation (Developer Mode)
 1.  **Clone** this repository.
